@@ -20,11 +20,14 @@ def home():
     if request.method == "POST":
 
         user_input = request.form["question"]
+        subject = request.form["subject"]
         question = user_input
 
         try:
             study_prompt = f"""
 You are an AI Study Assistant.
+
+Subject: {subject}
 
 Your job:
 - Explain concepts clearly
@@ -32,6 +35,7 @@ Your job:
 - Give step-by-step answers
 - Use examples when helpful
 - If the student asks for homework help, explain the method first
+
 
 Student question:
 {user_input}
