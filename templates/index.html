@@ -16,23 +16,24 @@
     <h1>Your AI Study GURU 😌</h1>
 
     <form method="POST" class="form">
-    <label for="search" class="search-box">
 
-        <select name="subject" class="subject-select">
-    <option value="General">General</option>
-    <option value="Math">Math</option>
-    <option value="Science">Science</option>
-    <option value="Coding">Coding</option>
-    <option value="English">English</option>
-    <option value="History">History</option>
-        </select>
-        
-        <select name="answer_style" class="subject-select">
-    <option value="Simple explanation">Simple</option>
-    <option value="Step-by-step explanation">Step-by-step</option>
-    <option value="Short study notes">Short notes</option>
-    <option value="Quiz format">Quiz me</option>
-        </select>
+    <select name="subject" class="subject-select">
+        <option value="General">General</option>
+        <option value="Math">Math</option>
+        <option value="Science">Science</option>
+        <option value="Coding">Coding</option>
+        <option value="English">English</option>
+        <option value="History">History</option>
+    </select>
+
+    <select name="answer_style" class="subject-select">
+        <option value="Simple explanation">Simple</option>
+        <option value="Step-by-step explanation">Step-by-step</option>
+        <option value="Short study notes">Short notes</option>
+        <option value="Quiz format">Quiz me</option>
+    </select>
+
+    <label for="search" class="search-box">
         <input
             class="input"
             type="text"
@@ -45,26 +46,28 @@
         <div class="fancy-bg"></div>
 
         <div class="search">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-                <g>
-                    <path d="M21.53 20.47l-3.66-3.66C19.195 15.24 20 13.214 20 11c0-4.97-4.03-9-9-9s-9 4.03-9 9 4.03 9 9 9c2.215 0 4.24-.804 5.808-2.13l3.66 3.66c.147.146.34.22.53.22s.385-.073.53-.22c.295-.293.295-.767.002-1.06zM3.5 11c0-4.135 3.365-7.5 7.5-7.5s7.5 3.365 7.5 7.5-3.365 7.5-7.5 7.5-7.5-3.365-7.5-7.5z"></path>
-                </g>
-            </svg>
+            <!-- keep your search svg here -->
         </div>
 
         <button class="close-btn" type="reset">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
-            </svg>
+            <!-- keep your close svg here -->
         </button>
     </label>
 
     <button type="submit" class="ask-btn">Ask AI</button>
+
 </form>
-{% if response %}
-    <form method="GET">
-        <button type="submit" class="clear-btn">Clear</button>
-    </form>
+
+{% if history %}
+    {% for item in history %}
+        <div class="response-box">
+            <h2>Your Question</h2>
+            <p>{{ item.question }}</p>
+
+            <h2>Answer</h2>
+            <p>{{ item.answer }}</p>
+        </div>
+    {% endfor %}
 {% endif %}
 
 {% if response %}

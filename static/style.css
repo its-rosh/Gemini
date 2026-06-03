@@ -13,31 +13,39 @@ h1 {
   --input-bg-color: #283542;
   --focus-input-bg-color: transparent;
   --text-color: #949faa;
-  --active-color: #EE6E1B;
-  --width-of-input: 260px;
+  --active-color: #1b9bee;
+  --width-of-input: 360px;
   --inline-padding-of-input: 1.2em;
   --gap: 0.9rem;
 
-  font-size: 0.9rem;
   display: flex;
-  gap: 0.5rem;
   align-items: center;
   justify-content: center;
-  width: fit-content;
-  margin: 0 auto;
+  gap: 12px;
+  width: min(1000px, 90%);
+  margin: 0 auto 36px;
+  flex-wrap: wrap;
 }
 
 .search-box {
   width: var(--width-of-input);
   padding: 0.8em;
-  height: 40px;
+  height: 48px;
   padding-inline: var(--inline-padding-of-input);
   display: flex;
   align-items: center;
   position: relative;
   isolation: isolate;
 }
-
+.subject-select {
+  height: 48px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 24px;
+  background-color: #283542;
+  color: white;
+  cursor: pointer;
+}
 .fancy-bg {
   position: absolute;
   width: 100%;
@@ -113,18 +121,20 @@ svg {
 }
 
 .ask-btn {
-  height: 40px;
-  padding: 0 16px;
+  height: 48px;
+  padding: 0 20px;
   border: none;
-  border-radius: 20px;
-  background-color: #1b9bee;
+  border-radius: 24px;
+  background-color: #586167;
   color: white;
   cursor: pointer;
+  font-weight: 600;
 }
 
 .ask-btn:hover {
   background-color: #1378bb;
 }
+
 textarea.input {
     resize: none;
     height: 40px;
@@ -162,14 +172,4 @@ textarea.input {
 
 .clear-btn:hover {
     background-color: #111;
-}
-
-.subject-select {
-  height: 40px;
-  padding: 0 12px;
-  border: none;
-  border-radius: 20px;
-  background-color: #283542;
-  color: white;
-  cursor: pointer;
 }
