@@ -21,6 +21,7 @@ def home():
 
         user_input = request.form["question"]
         subject = request.form["subject"]
+        answer_style = request.form["answer_style"]
         question = user_input
 
         try:
@@ -28,14 +29,14 @@ def home():
 You are an AI Study Assistant.
 
 Subject: {subject}
+Answer style: {answer_style}
 
 Your job:
 - Explain concepts clearly
 - Use simple student-friendly language
-- Give step-by-step answers
+- Give step-by-step answers when requested
 - Use examples when helpful
 - If the student asks for homework help, explain the method first
-
 
 Student question:
 {user_input}
