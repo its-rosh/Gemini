@@ -13,9 +13,9 @@ h1 {
   --input-bg-color: #283542;
   --focus-input-bg-color: transparent;
   --text-color: #949faa;
-  --active-color: #1b9bee;
+  --active-color: #f1610d;
   --width-of-input: 360px;
-  --inline-padding-of-input: 1.2em;
+  --inline-padding-of-input: 2.8em;
   --gap: 0.9rem;
 
   display: flex;
