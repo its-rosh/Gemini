@@ -59,8 +59,19 @@
 </form>
 
 {% if history %}
+    
+    <form action="/clear" method="POST">
+        <button type="submit" class="clear-btn">Clear History</button>
+    </form>
+
     {% for item in history %}
         <div class="response-box">
+            <div class="meta-row">
+        <span>{{ item.subject }}</span>
+        <span>{{ item.answer_style }}</span>
+        <span>{{ item.created_at.strftime("%d %b %Y, %I:%M %p") }}</span>
+            </div>
+            
             <h2>Your Question</h2>
             <p>{{ item.question }}</p>
 
@@ -68,16 +79,6 @@
             <p>{{ item.answer }}</p>
         </div>
     {% endfor %}
-{% endif %}
-
-{% if response %}
-    <div class="response-box">
-        <h2>Your Question</h2> 
-        <p>{{ question }}</p>
-
-        <h2>Answer</h2>
-        <p>{{ response }}</p>
-    </div>
 {% endif %}
 
 </body>

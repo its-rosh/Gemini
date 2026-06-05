@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 from google import genai
 from datetime import datetime
@@ -29,7 +29,7 @@ class ChatHistory(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def home():
 
-    history = session.get("history", [])
+    history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
 
     if request.method == "POST":
 
@@ -65,16 +65,23 @@ Student question:
         except Exception as e:
             response = "Sorry, something went wrong. Please try again after a few minutes."
 
-        history.append({
-            "question": user_input,
-            "answer": response,
-            "subject": subject,
-            "answer_style": answer_style
-        })
+        chat = ChatHistory(
+        question=user_input,
+        answer=response,
+        subject=subject,
+        answer_style=answer_style)
 
-        session["history"] = history
+        db.session.add(chat)
+        db.session.commit()
+        history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
 
     return render_template("index.html", history=history)
+
+@app.route("/clear", methods=["POST"])
+def clear_history():
+    ChatHistory.query.delete()
+    db.session.commit()
+    return redirect("/")
 
 if __name__ == "__main__":
     with app.app_context():

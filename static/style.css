@@ -173,3 +173,41 @@ textarea.input {
 .clear-btn:hover {
     background-color: #111;
 }
+
+.clear-btn {
+  margin: 0 auto 20px;
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 20px;
+  background-color: #333;
+  color: white;
+  cursor: pointer;
+}
+
+.clear-btn:hover {
+  background-color: #111;
+}
+
+.meta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.meta-row span {
+  padding: 6px 10px;
+  border-radius: 20px;
+  background-color: #eaf4ff;
+  color: #1378bb;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.filter-form {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 0 auto 20px;
+  flex-wrap: wrap;
+}
