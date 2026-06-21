@@ -211,3 +211,64 @@ textarea.input {
   margin: 0 auto 20px;
   flex-wrap: wrap;
 }
+.history-section {
+  width: min(1000px, 90%);
+  margin: 40px auto;
+}
+
+.history-section h2 {
+  text-align: left;
+  color: #222;
+}
+
+.empty-history {
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  color: #555;
+}
+
+.meta-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+}
+
+.meta-row span {
+  padding: 6px 10px;
+  border-radius: 20px;
+  background-color: #eaf4ff;
+  color: #1378bb;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.history-toggle-btn {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  height: 40px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 20px;
+  background-color: #283542;
+  color: white;
+  cursor: pointer;
+  font-weight: 600;
+  z-index: 10;
+}
+
+.history-toggle-btn:hover {
+  background-color: #1b9bee;
+}
+
+.history-section {
+  display: none;
+  width: min(1000px, 90%);
+  margin: 40px auto;
+}
+
+.history-section.show {
+  display: block;
+}

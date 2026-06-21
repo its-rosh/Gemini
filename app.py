@@ -30,6 +30,7 @@ class ChatHistory(db.Model):
 def home():
 
     history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
+    #this is the name of DB / Start a database query on the ChatHistory table./ you know this  / Get all matching rows.
 
     if request.method == "POST":
 
@@ -76,6 +77,7 @@ Student question:
         history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
 
     return render_template("index.html", history=history)
+# this is the end of home()
 
 @app.route("/clear", methods=["POST"])
 def clear_history():
