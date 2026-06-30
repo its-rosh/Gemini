@@ -82,6 +82,11 @@
 
                 <h3>Answer</h3>
                 <p>{{ item.answer }}</p>
+
+                <form action="{{ url_for('delete_history_item', history_id=item.id) }}" method="POST">
+    <button type="submit" class="delete-btn">Delete</button>
+</form>
+
             </div>
         {% endfor %}
     {% else %}
@@ -108,6 +113,10 @@
 
             <h2>Answer</h2>
             <p>{{ item.answer }}</p>
+
+            <form action="{{ url_for('delete_history_item', history_id=item.id) }}" method="POST">
+    <button type="submit" class="delete-btn">Delete</button>
+</form>
         </div>
     {% endfor %}
 {% endif %}

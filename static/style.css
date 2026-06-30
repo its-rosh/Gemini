@@ -272,3 +272,18 @@ textarea.input {
 .history-section.show {
   display: block;
 }
+
+.delete-btn {
+  margin-top: 12px;
+  height: 36px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 18px;
+  background-color: #d9534f;
+  color: white;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  background-color: #b52b27;
+}

@@ -84,6 +84,14 @@ def clear_history():
     ChatHistory.query.delete()
     db.session.commit()
     return redirect("/")
+@app.route("/delete/<int:history_id>", methods=["POST"])
+def delete_history_item(history_id):
+    item = ChatHistory.query.get_or_404(history_id)
+
+    db.session.delete(item)
+    db.session.commit()
+
+    return redirect("/")
 
 if __name__ == "__main__":
     with app.app_context():
