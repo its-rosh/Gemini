@@ -29,7 +29,18 @@ class ChatHistory(db.Model):
 @app.route("/", methods=["GET", "POST"])
 def home():
 
-    history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
+    search_text = request.args.get("search", "")
+    # this reads the rearch word form the query
+    query = ChatHistory.query
+    if search_text:
+        query = query.filter(
+        (ChatHistory.question.ilike(f"%{search_text}%")) | # OR
+        #ilike means case-insensitive search.
+        (ChatHistory.answer.ilike(f"%{search_text}%"))
+        #question contains search text OR answer contains search text
+    )
+
+        history = query.order_by(ChatHistory.created_at.desc()).all()
     #this is the name of DB / Start a database query on the ChatHistory table./ you know this  / Get all matching rows.
 
     if request.method == "POST":
@@ -65,16 +76,16 @@ Student question:
 
         except Exception as e:
             response = "Sorry, something went wrong. Please try again after a few minutes."
-# need to remore commenets fom there 
-        # chat = ChatHistory(
-        # question=user_input,
-        # answer=response,
-        # subject=subject,
-        # answer_style=answer_style)
 
-        # db.session.add(chat)
-        # db.session.commit()
-        # history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
+        chat = ChatHistory(
+        question=user_input,
+        answer=response,
+        subject=subject,
+        answer_style=answer_style)
+
+        db.session.add(chat)
+        db.session.commit()
+        history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
 
     return render_template("index.html", history=history)
 # this is the end of home()

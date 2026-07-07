@@ -65,6 +65,18 @@
 <section class="history-section" id="historySection">
     <h2>Study History</h2>
 
+    <form method="GET" class="history-search-form">
+        <input
+            type="text"
+            name="search"
+            class="history-search-input"
+            placeholder="Search history..."
+        >
+
+        <button type="submit" class="ask-btn">Search</button>
+    </form>
+<!-- the above section is to search history with the help of secfic word -->
+
     <!--we have one if else section here --> 
     {% if history %}
     <!--If PostgreSQL returned saved rows, show them.-->
@@ -98,36 +110,6 @@
     {% endif %}
 </section>
 
-{% if history %}
-    
-    <form action="/clear" method="POST">
-        <button type="submit" class="clear-btn">Clear History</button>
-    </form>
-
-    {% for item in history %}
-        <div class="response-box">
-            <div class="meta-row">
-        <span>{{ item.subject }}</span>
-        <span>{{ item.answer_style }}</span>
-        <span>{{ item.created_at.strftime("%d %b %Y, %I:%M %p") }}</span>
-            </div>
-            
-            <h2>Your Question</h2>
-            <p>{{ item.question }}</p>
-
-            <h2>Answer</h2>
-            <p>{{ item.answer }}</p>
-
-            <form
-    action="{{ url_for('delete_history_item', history_id=item.id) }}"
-    method="POST"
-    onsubmit="return confirmDelete()"
->
-    <button type="submit" class="delete-btn">Delete</button>
-</form>
-        </div>
-    {% endfor %}
-{% endif %}
 
 <!-- this where we added the tag for javascript sheet -->
 <script src="{{ url_for('static', filename='script.js') }}"></script>
