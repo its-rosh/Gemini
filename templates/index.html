@@ -60,8 +60,31 @@
     </label>
 
     <button type="submit" class="ask-btn">Ask AI</button>
-
 </form>
+
+<section class="notes-section">
+    <h2>Summarize Notes</h2>
+
+    <form method="POST" action="/summarize" class="notes-form">
+        <textarea
+            name="notes"
+            class="notes-textarea"
+            placeholder="Paste your notes here..."
+            required
+        ></textarea>
+
+        <button type="submit" class="ask-btn">Summarize</button>
+    </form>
+
+    {% if summary %}
+        <div class="response-box">
+            <h3>Notes Summary</h3>
+            <p>{{ summary }}</p>
+        </div>
+    {% endif %}
+</section>
+
+<!-- History sections starts here-->
 <section class="history-section" id="historySection">
     <h2>Study History</h2>
 
@@ -71,9 +94,11 @@
             name="search"
             class="history-search-input"
             placeholder="Search history..."
+            value="{{ search_text }}"
         >
 
         <button type="submit" class="ask-btn">Search</button>
+        <a href="/" class="clear-search-btn">Clear Search</a>
     </form>
 <!-- the above section is to search history with the help of secfic word -->
 
@@ -106,7 +131,15 @@
             </div>
         {% endfor %}
     {% else %}
-        <p class="empty-history">No study history yet.</p>
+        {% if search_text %}
+        <p class="empty-history">
+            No results found for "{{ search_text }}".
+        </p>
+    {% else %}
+        <p class="empty-history">
+            No study history yet.
+        </p>
+    {% endif %}
     {% endif %}
 </section>
 

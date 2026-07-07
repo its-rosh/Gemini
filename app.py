@@ -34,11 +34,11 @@ def home():
     query = ChatHistory.query
     if search_text:
         query = query.filter(
-        (ChatHistory.question.ilike(f"%{search_text}%")) | # OR
+            (ChatHistory.question.ilike(f"%{search_text}%")) | # OR
         #ilike means case-insensitive search.
-        (ChatHistory.answer.ilike(f"%{search_text}%"))
+            (ChatHistory.answer.ilike(f"%{search_text}%"))
         #question contains search text OR answer contains search text
-    )
+        )
 
         history = query.order_by(ChatHistory.created_at.desc()).all()
     #this is the name of DB / Start a database query on the ChatHistory table./ you know this  / Get all matching rows.
@@ -51,20 +51,20 @@ def home():
 
         try:
             study_prompt = f"""
-You are an AI Study Assistant.
+            You are an AI Study Assistant.
+            Subject: {subject}
+            
+            Answer style: {answer_style}
 
-Subject: {subject}
-Answer style: {answer_style}
-
-Your job:
-- Explain concepts clearly
-- Use simple student-friendly language
-- Give step-by-step answers when requested
-- Use examples when helpful
-- If the student asks for homework help, explain the method first
-
-Student question:
-{user_input}
+            Your job:
+            - Explain concepts clearly
+            - Use simple student-friendly language
+            - Give step-by-step answers when requested
+            - Use examples when helpful
+            - If the student asks for homework help, explain the method first
+            
+            Student question:
+            {user_input}
 """
 
             ai_response = client.models.generate_content(
@@ -78,16 +78,17 @@ Student question:
             response = "Sorry, something went wrong. Please try again after a few minutes."
 
         chat = ChatHistory(
-        question=user_input,
-        answer=response,
-        subject=subject,
-        answer_style=answer_style)
+            question=user_input,
+            answer=response,
+            subject=subject,
+            answer_style=answer_style)
 
         db.session.add(chat)
         db.session.commit()
-        history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
+    history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
 
-    return render_template("index.html", history=history)
+    return render_template("index.html", history=history, search_text=search_text)
+#This sends the searched word to HTML.
 # this is the end of home()
 
 @app.route("/clear", methods=["POST"])
@@ -103,6 +104,47 @@ def delete_history_item(history_id):
     db.session.commit()
 
     return redirect("/")
+
+
+@app.route("/summarize", methods=["POST"])
+def summarize_notes():
+    notes = request.form["notes"]
+
+    try:
+        summary_prompt = f"""
+You are an AI Study Assistant.
+
+Summarize these notes for a student.
+
+Return:
+- Short summary
+- Key points
+- Important terms
+- 3 quick quiz questions
+
+Notes:
+{notes}
+"""
+
+        ai_response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=summary_prompt
+        )
+
+        summary = ai_response.text
+
+    except Exception as e:
+        summary = "Sorry, I could not summarize the notes right now."
+
+    history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
+
+    return render_template(
+        "index.html",
+        history=history,
+        summary=summary,
+        search_text=""
+    )
+
 
 if __name__ == "__main__":
     with app.app_context():
