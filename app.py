@@ -5,6 +5,7 @@ from datetime import datetime
 import os
 from dotenv import load_dotenv
 
+
 load_dotenv()
 api_key = os.getenv("GEMINI_API_KEY")
 database_url = os.getenv("DATABASE_URL")
@@ -12,7 +13,7 @@ database_url = os.getenv("DATABASE_URL")
 client = genai.Client(api_key=api_key)
 
 app = Flask(__name__)
-app.secret_key = "study-assistant-secret"
+app.secret_key = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
@@ -40,14 +41,11 @@ def home():
         #question contains search text OR answer contains search text
         )
 
-        history = query.order_by(ChatHistory.created_at.desc()).all()
-    #this is the name of DB / Start a database query on the ChatHistory table./ you know this  / Get all matching rows.
-
     if request.method == "POST":
 
-        user_input = request.form["question"]
-        subject = request.form["subject"]
-        answer_style = request.form["answer_style"]
+        user_input = request.form.get("question", "").strip()
+        subject = request.form.get("subject", "").strip()
+        answer_style = request.form.get("answer_style", "").strip()
 
         try:
             study_prompt = f"""
@@ -68,7 +66,7 @@ def home():
 """
 
             ai_response = client.models.generate_content(
-                model="gemini-2.5-flash",
+                model="MODEL_NAME",
                 contents=study_prompt
             )
 
@@ -85,7 +83,8 @@ def home():
 
         db.session.add(chat)
         db.session.commit()
-    history = ChatHistory.query.order_by(ChatHistory.created_at.desc()).all()
+    history = query.order_by(ChatHistory.created_at.desc()).all()
+    #this is the name of DB / Start a database query on the ChatHistory table./ you know this  / Get all matching rows.
 
     return render_template("index.html", history=history, search_text=search_text)
 #This sends the searched word to HTML.
@@ -150,4 +149,4 @@ if __name__ == "__main__":
     with app.app_context():
         db.create_all()
 
-    app.run(debug=True)
+    app.run(debug=os.getenv("FLASK_DEBUG") == "1")
