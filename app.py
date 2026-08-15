@@ -1,9 +1,13 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from google import genai
 from datetime import datetime
 import os
 from dotenv import load_dotenv
+from sqlalchemy.dialects.postgresql import TSVECTOR
+from sqlalchemy import Computed
+from sqlalchemy import Index
 
 
 load_dotenv()
@@ -18,6 +22,9 @@ app.config["SQLALCHEMY_DATABASE_URI"] = database_url
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
+#`Migrate(app, db)` links Alembic to your Flask app and your `db` (SQLAlchemy) 
+# instance, so `flask db` commands know which models and which database to compare.
 
 class ChatHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -26,6 +33,13 @@ class ChatHistory(db.Model):
     subject = db.Column(db.String(50), nullable=False)
     answer_style = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    search_vector = db.Column(
+        TSVECTOR,
+        Computed("to_tsvector('english', question || ' ' || answer)", persisted=True)
+    )
+    __table_args__ = (
+        Index('idx_chat_search', 'search_vector', postgresql_using='gin'),
+    )
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -150,3 +164,6 @@ if __name__ == "__main__":
         db.create_all()
 
     app.run(debug=os.getenv("FLASK_DEBUG") == "1")
+
+
+    15_23_34
