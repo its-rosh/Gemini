@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 from sqlalchemy.dialects.postgresql import TSVECTOR
 from sqlalchemy import Computed
 from sqlalchemy import Index
+from sqlalchemy import func
 
 
 load_dotenv()
@@ -32,7 +33,7 @@ class ChatHistory(db.Model):
     answer = db.Column(db.Text, nullable=False)
     subject = db.Column(db.String(50), nullable=False)
     answer_style = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow, index=True)
     search_vector = db.Column(
         TSVECTOR,
         Computed("to_tsvector('english', question || ' ' || answer)", persisted=True)
@@ -48,12 +49,13 @@ def home():
     # this reads the rearch word form the query
     query = ChatHistory.query
     if search_text:
-        query = query.filter(
-            (ChatHistory.question.ilike(f"%{search_text}%")) | # OR
-        #ilike means case-insensitive search.
-            (ChatHistory.answer.ilike(f"%{search_text}%"))
-        #question contains search text OR answer contains search text
-        )
+        ts_query = func.plainto_tsquery('english', search_text)
+        query = query.filter(ChatHistory.search_vector.op('@@')(ts_query))
+        query = query.order_by(func.ts_rank(ChatHistory.search_vector, ts_query).desc())
+    else:
+        query = query.order_by(ChatHistory.created_at.desc())
+
+    history = query.all()
 
     if request.method == "POST":
 
